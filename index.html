@@ -2,23 +2,21 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo Matemático</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
-
     body {
-      font-family: 'Orbitron', monospace, Arial, sans-serif;
-      margin: 0;
-      padding: 40px 20px;
+      font-family: 'Orbitron', monospace;
       background: #0b1120;
+      color: #cce6ff;
+      padding: 40px 20px;
+      margin: 0;
       overflow-x: hidden;
       position: relative;
-      color: #cce6ff;
       min-height: 100vh;
     }
 
-    /* Fundo geral com elementos matemáticos (símbolos flutuantes) */
     body::before {
       content: "∑ √ ∞ ∫ π ∆ α β γ θ λ ∂ ± × ÷ ∞ ∑ ∆ π";
       position: fixed;
@@ -41,330 +39,169 @@
       100% { transform: translateX(-50%) translateY(0);}
     }
 
-    /* Painel do jogo destacado com fundo colorido e vidro líquido */
     .container {
       max-width: 500px;
       margin: auto;
-      padding: 30px 35px;
-      background: rgba(0, 42, 102, 0.85); /* azul escuro translúcido */
-      border-radius: 30px;
-      box-shadow:
-        0 0 25px 5px rgba(0, 102, 204, 0.7),
-        inset 0 0 40px 7px rgba(0, 150, 255, 0.4);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 2px solid rgba(0, 153, 255, 0.8);
+      background: rgba(0, 42, 102, 0.85);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px #0099ff;
+      text-align: center;
       position: relative;
       z-index: 1;
-      color: #cceeff;
-      text-align: center;
     }
-
-    /* Título com neon azul */
     h1 {
-      font-size: 3rem;
-      margin-bottom: 1.2rem;
-      font-weight: 700;
+      font-size: 2rem;
       color: #a0d8ff;
-      text-shadow:
-        0 0 8px #00aaff,
-        0 0 20px #0099ff,
-        0 0 30px #0066cc;
-      letter-spacing: 0.12em;
+      text-shadow: 0 0 8px #00aaff;
     }
-
-    /* Ajuste para telas pequenas */
-    @media (max-width: 520px) {
-      h1 {
-        font-size: 2rem;
-        letter-spacing: 0.05em;
-        word-break: break-word;
-        margin-bottom: 1rem;
-      }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
     }
-
-    /* Texto principais */
-    #fase, #pontuacao, #cronometro, #pergunta, #feedback {
-      font-weight: 600;
-      font-size: 1.4rem;
-      margin: 15px 0;
-      letter-spacing: 0.08em;
-      text-shadow: 0 0 6px rgba(0, 153, 255, 0.9);
-    }
-
-    /* Input estilizado */
-    input[type="number"] {
-      width: 65%;
-      padding: 14px 20px;
-      font-size: 1.4rem;
-      border-radius: 28px;
-      border: 2px solid #007acc;
-      background: rgba(10, 40, 70, 0.5);
-      color: #cceeff;
+    input {
+      width: 70%;
       text-align: center;
-      box-shadow: inset 0 0 12px #005999aa;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
-
-    input[type="number"]::placeholder {
-      color: #99cceeaa;
-    }
-
-    input[type="number"]:focus {
-      outline: none;
-      border-color: #33bbff;
-      box-shadow: inset 0 0 18px #33bbffcc;
-    }
-
-    /* Botões estilo game */
     button {
-      margin: 20px 12px 8px;
-      padding: 16px 34px;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #00ccff;
-      background: transparent;
-      border: 2px solid #0099cc;
-      border-radius: 28px;
+      background: #007acc;
+      color: white;
       cursor: pointer;
-      text-shadow:
-        0 0 8px #00ccff,
-        0 0 15px #0088bb;
-      box-shadow:
-        0 0 12px #00bbff33,
-        inset 0 0 8px #00ccff55;
-      transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
-      user-select: none;
-      position: relative;
-      z-index: 2;
     }
-
-    button:hover {
-      background-color: rgba(0, 153, 255, 0.2);
-      box-shadow:
-        0 0 25px #00ccff,
-        inset 0 0 18px #00ccff;
-      color: #aeefff;
+    .ranking {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 10px;
     }
-
-    /* Barra de progresso com glow */
-    .barra-progresso-container {
-      width: 100%;
-      height: 16px;
-      border-radius: 32px;
-      background: rgba(0, 45, 90, 0.3);
-      margin: 30px 0 15px;
-      box-shadow: inset 0 0 15px #005e9c;
-      overflow: hidden;
-      backdrop-filter: blur(3px);
+    .ranking h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
     }
-
-    .barra-progresso {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #00e6ff, #0077cc);
-      border-radius: 32px;
-      box-shadow:
-        0 0 22px #00cfffcc,
-        0 0 40px #0077cccc;
-      transition: width 0.45s ease-in-out;
-    }
-
-    /* Feedback com animação neon */
-    #feedback {
-      min-height: 2em;
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: #00eaff;
-      text-shadow:
-        0 0 10px #00eaff,
-        0 0 20px #0077cc;
-      animation: pulse 1.8s ease-in-out infinite;
-      user-select: none;
-    }
-
-    #feedback.wrong {
-      color: #ff4444;
-      text-shadow:
-        0 0 10px #ff4444,
-        0 0 30px #bb2222;
-      animation: pulseRed 1.8s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { text-shadow: 0 0 10px #00eaff, 0 0 20px #0077cc; }
-      50% { text-shadow: 0 0 22px #33ffff, 0 0 40px #0099cc; }
-    }
-
-    @keyframes pulseRed {
-      0%, 100% { text-shadow: 0 0 10px #ff4444, 0 0 30px #bb2222; }
-      50% { text-shadow: 0 0 22px #ff6666, 0 0 50px #cc2222; }
-    }
-
-    /* Responsivo */
-    @media (max-width: 520px) {
-      input[type="number"] {
-        width: 85%;
-        font-size: 1.2rem;
-      }
-      button {
-        width: 90%;
-        margin: 12px auto;
-        font-size: 1.1rem;
-      }
+    .ranking-item {
+      font-size: 1rem;
+      margin: 4px 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Jogo Matemático</h1>
-    <div id="game">
-      <p id="fase">Fase: 1 (Soma)</p>
+    <input type="text" id="nomeAluno" placeholder="Digite seu nome" />
+    <div id="game" style="display:none">
+      <p id="fase">Fase: 1</p>
       <p id="pontuacao">Pontuação: 0</p>
       <p id="cronometro">Tempo: 60</p>
-      <p id="pergunta">Quanto é 1 + 1?</p>
-      <input type="number" id="resposta" placeholder="Digite a resposta" autocomplete="off" />
-      <button onclick="verificarResposta()">Responder</button>
+      <p id="pergunta"></p>
+      <input type="number" id="resposta" placeholder="Digite a resposta" />
       <p id="feedback"></p>
-
-      <div class="barra-progresso-container">
-        <div class="barra-progresso" id="progresso"></div>
-      </div>
+      <button onclick="verificarResposta()">Responder</button>
     </div>
-    <button onclick="iniciarJogo()" id="botao-inicio">Iniciar Jogo</button>
+    <button onclick="iniciarJogo()">Iniciar Jogo</button>
+
+    <div class="ranking">
+      <h2>Ranking dos Alunos</h2>
+      <div id="listaRanking"></div>
+    </div>
   </div>
 
   <script>
-    // Sons do Jogo (comente ou substitua os arquivos se não usar)
-    // const somAcerto = new Audio('acerto.mp3');
-    // const somErro = new Audio('erro.mp3');
-
-    // Estado do jogo
     let fase = 1;
     let pontuacao = 0;
-    let tempo = 60; // cronômetro inicial 60s
-    let intervaloCronometro;
+    let tempo = 60;
+    let intervalo;
     let numero1, numero2, respostaCorreta;
+    let nomeAluno = "";
+    let perguntasRespondidas = 0;
 
-    // Elementos do DOM
+    const inputNome = document.getElementById("nomeAluno");
     const inputResposta = document.getElementById("resposta");
     const elementoPergunta = document.getElementById("pergunta");
     const elementoFeedback = document.getElementById("feedback");
     const elementoFase = document.getElementById("fase");
     const elementoPontuacao = document.getElementById("pontuacao");
     const elementoCronometro = document.getElementById("cronometro");
-    const elementoProgresso = document.getElementById("progresso");
-    const elementoGameContainer = document.getElementById("game");
-    const botaoInicio = document.getElementById("botao-inicio");
 
-    // Escuta enter no input para responder rápido
-    inputResposta.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        verificarResposta();
-      }
+    inputResposta.addEventListener("keydown", e => {
+      if (e.key === "Enter") verificarResposta();
+    });
+
+    inputNome.addEventListener("keydown", e => {
+      if (e.key === "Enter") iniciarJogo();
     });
 
     function iniciarJogo() {
-      pontuacao = 0;
+      nomeAluno = inputNome.value.trim();
+      if (!nomeAluno) return alert("Digite seu nome!");
+
       fase = 1;
+      pontuacao = 0;
       tempo = 60;
-      elementoGameContainer.style.display = "block";
-      botaoInicio.style.display = "none";
+      perguntasRespondidas = 0;
+      document.getElementById("game").style.display = "block";
       atualizarInterface();
       gerarPergunta();
       iniciarCronometro();
-      inputResposta.focus();
-      elementoFeedback.textContent = "";
     }
 
     function iniciarCronometro() {
-      clearInterval(intervaloCronometro);
-      intervaloCronometro = setInterval(() => {
+      clearInterval(intervalo);
+      intervalo = setInterval(() => {
         tempo--;
         elementoCronometro.textContent = `Tempo: ${tempo}`;
         if (tempo <= 0) {
-          clearInterval(intervaloCronometro);
+          clearInterval(intervalo);
           encerrarJogo();
         }
       }, 1000);
     }
 
     function gerarPergunta() {
-      let operador = "";
-
-      switch (fase) {
-        case 1: // Soma
-          numero1 = Math.floor(Math.random() * 10 + 1);
-          numero2 = Math.floor(Math.random() * 10 + 1);
-          operador = "+";
-          respostaCorreta = numero1 + numero2;
-          break;
-        case 2: // Subtração
-          numero1 = Math.floor(Math.random() * 20 + 1);
-          numero2 = Math.floor(Math.random() * Math.min(numero1, 15) + 1);
-          operador = "-";
-          respostaCorreta = numero1 - numero2;
-          break;
-        case 3: // Multiplicação
-          numero1 = Math.floor(Math.random() * 10 + 1);
-          numero2 = Math.floor(Math.random() * 10 + 1);
-          operador = "x";
-          respostaCorreta = numero1 * numero2;
-          break;
-        case 4: // Divisão (inteiro)
-          respostaCorreta = Math.floor(Math.random() * 10 + 1);
-          numero2 = Math.floor(Math.random() * 9 + 1);
-          numero1 = numero2 * respostaCorreta;
-          operador = "÷";
-          break;
-        default:
-          encerrarJogo();
-          return;
+      numero1 = Math.floor(Math.random() * 10 + 1);
+      numero2 = Math.floor(Math.random() * 10 + 1);
+      if (fase === 1) {
+        respostaCorreta = numero1 + numero2;
+        elementoPergunta.textContent = `Quanto é ${numero1} + ${numero2}?`;
+      } else if (fase === 2) {
+        respostaCorreta = numero1 - numero2;
+        elementoPergunta.textContent = `Quanto é ${numero1} - ${numero2}?`;
+      } else if (fase === 3) {
+        respostaCorreta = numero1 * numero2;
+        elementoPergunta.textContent = `Quanto é ${numero1} × ${numero2}?`;
+      } else if (fase === 4) {
+        respostaCorreta = numero1;
+        numero2 = Math.floor(Math.random() * 9 + 1);
+        numero1 = numero2 * respostaCorreta;
+        elementoPergunta.textContent = `Quanto é ${numero1} ÷ ${numero2}?`;
       }
-
-      elementoPergunta.textContent = `Quanto é ${numero1} ${operador} ${numero2}?`;
       inputResposta.value = "";
-      inputResposta.focus();
-      elementoFeedback.textContent = "";
     }
 
     function verificarResposta() {
-      const respostaUsuario = Number(inputResposta.value.trim());
-
-      let acertou;
-
-      if (fase === 1 || fase === 2 || fase === 3) {
-        acertou = respostaUsuario === respostaCorreta;
-      } else {
-        acertou = Math.abs(respostaUsuario - respostaCorreta) < 0.001;
-      }
-
+      const resposta = Number(inputResposta.value);
+      const acertou = Math.abs(resposta - respostaCorreta) < 0.001;
       if (acertou) {
-        //somAcerto.play();
         pontuacao += 10;
         elementoFeedback.textContent = "✅ Correto!";
-        elementoFeedback.classList.remove("wrong");
       } else {
-        //somErro.play();
-        elementoFeedback.textContent = `❌ Errado! A resposta correta era ${respostaCorreta}`;
-        elementoFeedback.classList.add("wrong");
+        elementoFeedback.textContent = `❌ Errado! Resposta correta: ${respostaCorreta}`;
       }
-
+      perguntasRespondidas++;
       verificarAvancoFase();
       atualizarInterface();
       gerarPergunta();
     }
 
     function verificarAvancoFase() {
-      if (pontuacao >= 30 && fase === 1) {
-        fase = 2;
-        alert("🎉 Fase 2: Subtração!");
-      } else if (pontuacao >= 60 && fase === 2) {
-        fase = 3;
-        alert("🎉 Fase 3: Multiplicação!");
-      } else if (pontuacao >= 90 && fase === 3) {
-        fase = 4;
-        alert("🎉 Fase 4: Divisão!");
+      if (perguntasRespondidas >= 4) {
+        perguntasRespondidas = 0;
+        if (fase < 4) {
+          fase++;
+          alert(`Fase ${fase}: ${["Soma", "Subtração", "Multiplicação", "Divisão"][fase - 1]}!`);
+        }
       }
     }
 
@@ -373,17 +210,28 @@
       elementoFase.textContent = `Fase: ${fase} (${nomesFases[fase - 1]})`;
       elementoPontuacao.textContent = `Pontuação: ${pontuacao}`;
       elementoCronometro.textContent = `Tempo: ${tempo}`;
-
-      let progresso = Math.min((pontuacao / 120) * 100, 100);
-      elementoProgresso.style.width = progresso + "%";
     }
 
     function encerrarJogo() {
-      clearInterval(intervaloCronometro);
-      alert(`⏰ Tempo esgotado! Sua pontuação final foi: ${pontuacao}`);
-      elementoGameContainer.style.display = "none";
-      botaoInicio.style.display = "inline-block";
+      alert(`Tempo esgotado! ${nomeAluno}, sua pontuação foi: ${pontuacao}`);
+      salvarRanking(nomeAluno, pontuacao);
+      mostrarRanking();
     }
+
+    function salvarRanking(nome, pontos) {
+      let ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
+      ranking.push({ nome, pontos });
+      ranking.sort((a, b) => b.pontos - a.pontos);
+      localStorage.setItem("rankingAlunos", JSON.stringify(ranking));
+    }
+
+    function mostrarRanking() {
+      const lista = document.getElementById("listaRanking");
+      const ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
+      lista.innerHTML = ranking.slice(0, 10).map((item, i) => `<div class='ranking-item'>${i+1}. ${item.nome}: ${item.pontos} pts</div>`).join("");
+    }
+
+    mostrarRanking();
   </script>
 </body>
 </html>
