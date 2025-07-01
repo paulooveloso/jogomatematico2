@@ -355,19 +355,18 @@
       gerarPergunta();
     }
 
-function verificarAvancoFase() {
-  if (pontuacao >= 30 && fase === 1) {
-    fase = 2;
-    alert("🎉 Fase 2: Subtração!");
-  } else if (pontuacao >= 60 && fase === 2) {
-    fase = 3;
-    alert("🎉 Fase 3: Multiplicação!");
-  } else if (pontuacao >= 90 && fase === 3) {
-    fase = 4;
-    alert("🎉 Fase 4: Divisão!");
-  }
-}
-
+    function verificarAvancoFase() {
+      if (pontuacao >= 30 && fase === 1) {
+        fase = 2;
+        alert("🎉 Fase 2: Subtração!");
+      } else if (pontuacao >= 60 && fase === 2) {
+        fase = 3;
+        alert("🎉 Fase 3: Multiplicação!");
+      } else if (pontuacao >= 90 && fase === 3) {
+        fase = 4;
+        alert("🎉 Fase 4: Divisão!");
+      }
+    }
 
     function atualizarInterface() {
       const nomesFases = ["Soma", "Subtração", "Multiplicação", "Divisão"];
