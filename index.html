@@ -6,6 +6,7 @@
   <title>Jogo Matemático</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
   <style>
+    /* Fonte e cores base */
     body {
       font-family: 'Orbitron', monospace;
       background: #0b1120;
@@ -14,8 +15,10 @@
       margin: 0;
       overflow-x: hidden;
       position: relative;
+      min-height: 100vh;
     }
-    /* Fundo geral com elementos matemáticos (símbolos flutuantes) */
+
+    /* Fundo com símbolos matemáticos flutuantes */
     body::before {
       content: "∑ √ ∞ ∫ π ∆ α β γ θ λ ∂ ± × ÷ ∞ ∑ ∆ π";
       position: fixed;
@@ -31,146 +34,219 @@
       animation: floatSymbols 20s linear infinite;
       z-index: 0;
     }
+
     @keyframes floatSymbols {
       0% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-50px);}
-      100% { transform: translateX(-50%) translateY(0);}
+      50% { transform: translateX(-50%) translateY(-50px); }
+      100% { transform: translateX(-50%) translateY(0); }
     }
 
+    /* Container do jogo */
     .container {
       max-width: 500px;
       margin: auto;
       background: rgba(0, 42, 102, 0.85);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 15px #0099ff;
-      text-align: center;
+      padding: 30px 35px;
+      border-radius: 30px;
+      box-shadow:
+        0 0 25px 5px rgba(0, 102, 204, 0.7),
+        inset 0 0 40px 7px rgba(0, 150, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid rgba(0, 153, 255, 0.8);
       position: relative;
       z-index: 1;
+      color: #cceeff;
+      text-align: center;
     }
+
+    /* Título */
     h1 {
-      font-size: 2rem;
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+      font-weight: 700;
       color: #a0d8ff;
-      text-shadow: 0 0 8px #00aaff;
-      margin-bottom: 20px;
+      text-shadow:
+        0 0 8px #00aaff,
+        0 0 20px #0099ff,
+        0 0 30px #0066cc;
+      letter-spacing: 0.12em;
     }
-    input, button {
-      margin: 10px;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      user-select: none;
-    }
-    input[type="text"] {
-      width: 80%;
-      text-align: center;
-    }
-    input[type="number"] {
+
+    /* Inputs e botões */
+    input[type="text"], input[type="number"] {
       width: 70%;
-      text-align: center;
+      padding: 14px 20px;
+      font-size: 1.4rem;
       border-radius: 28px;
       border: 2px solid #007acc;
       background: rgba(10, 40, 70, 0.5);
       color: #cceeff;
+      text-align: center;
       box-shadow: inset 0 0 12px #005999aa;
-      font-size: 1.2rem;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 20px;
     }
-    input[type="number"]::placeholder {
+
+    input::placeholder {
       color: #99cceeaa;
     }
-    input[type="number"]:focus {
+
+    input:focus {
       outline: none;
       border-color: #33bbff;
       box-shadow: inset 0 0 18px #33bbffcc;
     }
+
     button {
-      background: #007acc;
-      color: white;
-      cursor: pointer;
-      padding: 14px 28px;
-      font-weight: 700;
-      box-shadow: 0 0 12px #00bbff33, inset 0 0 8px #00ccff55;
-      transition: background-color 0.25s ease, box-shadow 0.3s ease;
-    }
-    button:hover {
-      background-color: rgba(0, 153, 255, 0.6);
-      box-shadow: 0 0 25px #00ccff, inset 0 0 18px #00ccff;
-    }
-    #game {
-      margin-top: 20px;
-    }
-    #fase, #pontuacao, #cronometro, #pergunta {
-      font-weight: 600;
+      margin: 10px 12px 8px;
+      padding: 16px 34px;
       font-size: 1.3rem;
-      margin: 12px 0;
-      letter-spacing: 0.05em;
-      text-shadow: 0 0 6px rgba(0, 153, 255, 0.9);
-      min-height: 24px;
-      user-select: none;
-    }
-    #feedback {
       font-weight: 700;
-      font-size: 1.4rem;
-      min-height: 28px;
-      margin-top: 8px;
+      color: #00ccff;
+      background: transparent;
+      border: 2px solid #0099cc;
+      border-radius: 28px;
+      cursor: pointer;
+      text-shadow:
+        0 0 8px #00ccff,
+        0 0 15px #0088bb;
+      box-shadow:
+        0 0 12px #00bbff33,
+        inset 0 0 8px #00ccff55;
+      transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
       user-select: none;
-      transition: color 0.3s ease, text-shadow 0.3s ease;
+      position: relative;
+      z-index: 2;
     }
-    #feedback.correct {
+
+    button:hover {
+      background-color: rgba(0, 153, 255, 0.2);
+      box-shadow:
+        0 0 25px #00ccff,
+        inset 0 0 18px #00ccff;
+      color: #aeefff;
+    }
+
+    /* Texto do jogo */
+    #fase, #pontuacao, #cronometro, #pergunta, #feedback {
+      font-weight: 600;
+      font-size: 1.4rem;
+      margin: 15px 0;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 6px rgba(0, 153, 255, 0.9);
+      min-height: 1.8em;
+    }
+
+    /* Feedback com animação neon */
+    #feedback {
       color: #00eaff;
-      text-shadow: 0 0 10px #00eaff, 0 0 20px #0077cc;
       animation: pulse 1.8s ease-in-out infinite;
+      user-select: none;
     }
+
     #feedback.wrong {
       color: #ff4444;
-      text-shadow: 0 0 10px #ff4444, 0 0 30px #bb2222;
       animation: pulseRed 1.8s ease-in-out infinite;
     }
+
     @keyframes pulse {
       0%, 100% { text-shadow: 0 0 10px #00eaff, 0 0 20px #0077cc; }
       50% { text-shadow: 0 0 22px #33ffff, 0 0 40px #0099cc; }
     }
+
     @keyframes pulseRed {
       0%, 100% { text-shadow: 0 0 10px #ff4444, 0 0 30px #bb2222; }
       50% { text-shadow: 0 0 22px #ff6666, 0 0 50px #cc2222; }
     }
+
+    /* Ranking */
     .ranking {
       margin-top: 30px;
       background: rgba(255,255,255,0.05);
       padding: 15px;
       border-radius: 10px;
-      max-height: 220px;
+      max-height: 250px;
       overflow-y: auto;
       text-align: left;
       color: #a0d8ff;
+      box-shadow:
+        0 0 12px #00bbff44;
     }
+
     .ranking h2 {
-      font-size: 1.3rem;
-      margin-bottom: 12px;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
       text-align: center;
     }
+
     .ranking-item {
-      font-size: 1.1rem;
-      margin: 6px 0;
-      user-select: none;
+      font-size: 1rem;
+      margin: 4px 0;
     }
+
+    /* Modal para alertas personalizadas */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 17, 32, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: rgba(0, 42, 102, 0.9);
+      padding: 25px 40px;
+      border-radius: 25px;
+      box-shadow:
+        0 0 25px 5px rgba(0, 102, 204, 0.9),
+        inset 0 0 40px 7px rgba(0, 150, 255, 0.6);
+      color: #a0d8ff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      text-shadow:
+        0 0 8px #00aaff,
+        0 0 20px #0099ff;
+    }
+
+    .modal-content button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      border-radius: 20px;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #00ccff;
+      background: transparent;
+      cursor: pointer;
+      box-shadow:
+        0 0 12px #00bbff33,
+        inset 0 0 8px #00ccff55;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .modal-content button:hover {
+      box-shadow:
+        0 0 25px #00ccff,
+        inset 0 0 18px #00ccff;
+    }
+
+    /* Responsivo */
     @media (max-width: 520px) {
-      input[type="number"], input[type="text"] {
-        width: 90%;
-        font-size: 1.1rem;
+      input[type="text"], input[type="number"] {
+        width: 85%;
+        font-size: 1.2rem;
       }
       button {
         width: 90%;
         margin: 12px auto;
         font-size: 1.1rem;
       }
-      .container {
-        padding: 20px;
-      }
       h1 {
-        font-size: 1.7rem;
+        font-size: 2.4rem;
       }
     }
   </style>
@@ -179,214 +255,248 @@
   <div class="container">
     <h1>Jogo Matemático</h1>
     <input type="text" id="nomeAluno" placeholder="Digite seu nome" autocomplete="off" />
-    <div id="game" style="display:none;">
-      <p id="fase">Fase: 1</p>
+    <div id="game" style="display:none">
+      <p id="fase">Fase: 1 (Soma)</p>
       <p id="pontuacao">Pontuação: 0</p>
       <p id="cronometro">Tempo: 60</p>
       <p id="pergunta"></p>
       <input type="number" id="resposta" placeholder="Digite a resposta" autocomplete="off" />
       <p id="feedback"></p>
-      <button onclick="verificarResposta()">Responder</button>
+      <button id="btnResponder">Responder</button>
     </div>
-    <button onclick="iniciarJogo()">Iniciar Jogo</button>
-    <button onclick="limparRanking()" style="margin-top:15px; background:#ff4444;">Limpar Ranking</button>
+    <button id="btnIniciar">Iniciar Jogo</button>
 
     <div class="ranking">
       <h2>Ranking dos Alunos</h2>
       <div id="listaRanking"></div>
+      <div style="text-align: center; margin-top: 15px;">
+  <button onclick="resetarRanking()">Resetar Ranking</button>
+</div>
+
     </div>
   </div>
 
-<script>
-  let fase = 1;
-  let pontuacao = 0;
-  let tempo = 60;
-  let intervalo;
-  let numero1, numero2, respostaCorreta;
-  let perguntasRespondidas = 0;
-  const perguntasPorFase = 4;
-  let nomeAluno = "";
+  <!-- Modal para avisos -->
+  <div id="modalAlerta" class="modal">
+    <div class="modal-content">
+      <p id="textoModal"></p>
+      <button id="btnFecharModal">OK</button>
+    </div>
+  </div>
 
-  const inputNome = document.getElementById("nomeAluno");
-  const inputResposta = document.getElementById("resposta");
-  const elementoPergunta = document.getElementById("pergunta");
-  const elementoFeedback = document.getElementById("feedback");
-  const elementoFase = document.getElementById("fase");
-  const elementoPontuacao = document.getElementById("pontuacao");
-  const elementoCronometro = document.getElementById("cronometro");
-  const listaRanking = document.getElementById("listaRanking");
-  const gameDiv = document.getElementById("game");
+  <script>
+    let fase = 1;
+    let pontuacao = 0;
+    let tempo = 60;
+    let intervalo;
+    let numero1, numero2, respostaCorreta;
+    let nomeAluno = "";
+    let perguntasRespondidasNaFase = 0;
+    const perguntasPorFase = 4;
 
-  // Pressionar Enter no input do nome inicia o jogo
-  inputNome.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      iniciarJogo();
-    }
-  });
+    const inputNome = document.getElementById("nomeAluno");
+    const inputResposta = document.getElementById("resposta");
+    const elementoPergunta = document.getElementById("pergunta");
+    const elementoFeedback = document.getElementById("feedback");
+    const elementoFase = document.getElementById("fase");
+    const elementoPontuacao = document.getElementById("pontuacao");
+    const elementoCronometro = document.getElementById("cronometro");
+    const gameDiv = document.getElementById("game");
 
-  // Pressionar Enter no input da resposta envia a resposta
-  inputResposta.addEventListener("keydown", e => {
-    if (e.key === "Enter") verificarResposta();
-  });
+    const btnIniciar = document.getElementById("btnIniciar");
+    const btnResponder = document.getElementById("btnResponder");
 
-  function iniciarJogo() {
-    nomeAluno = inputNome.value.trim();
-    if (!nomeAluno) {
-      alert("Por favor, digite seu nome antes de iniciar.");
-      return;
-    }
-    fase = 1;
-    pontuacao = 0;
-    tempo = 60;
-    perguntasRespondidas = 0;
-    elementoFeedback.textContent = "";
-    elementoFeedback.classList.remove("correct", "wrong");
-    gameDiv.style.display = "block";
-    atualizarInterface();
-    gerarPergunta();
-    iniciarCronometro();
-  }
+    const modal = document.getElementById("modalAlerta");
+    const textoModal = document.getElementById("textoModal");
+    const btnFecharModal = document.getElementById("btnFecharModal");
 
-  function iniciarCronometro() {
-    clearInterval(intervalo);
-    intervalo = setInterval(() => {
-      tempo--;
-      elementoCronometro.textContent = `Tempo: ${tempo}`;
-      if (tempo <= 0) {
-        clearInterval(intervalo);
-        encerrarJogo();
+    // Eventos
+    btnIniciar.onclick = iniciarJogo;
+    btnResponder.onclick = verificarResposta;
+
+    // Enter inicia o jogo se no nome, ou responde se estiver no input resposta
+    inputNome.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        iniciarJogo();
       }
-    }, 1000);
-  }
+    });
 
-  function gerarPergunta() {
-    perguntasRespondidas++;
-    if (perguntasRespondidas > perguntasPorFase) {
-      perguntasRespondidas = 1;
-      fase++;
-      if (fase > 4) {
-        encerrarJogo();
+    inputResposta.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        verificarResposta();
+      }
+    });
+
+    function iniciarJogo() {
+      nomeAluno = inputNome.value.trim();
+      if (!nomeAluno) {
+        alert("Por favor, digite seu nome!");
+        inputNome.focus();
         return;
       }
-      alert(`🎉 Parabéns! Avançando para a fase ${fase} (${nomeFases()[fase-1]})`);
+      fase = 1;
+      pontuacao = 0;
+      tempo = 60;
+      perguntasRespondidasNaFase = 0;
+
+      gameDiv.style.display = "block";
+      atualizarInterface();
+      gerarPergunta();
+      iniciarCronometro();
+
+      inputResposta.focus();
+      elementoFeedback.textContent = "";
+      btnIniciar.style.display = "none";
+      inputNome.disabled = true;
     }
 
-    switch(fase) {
-      case 1:
+    function iniciarCronometro() {
+      clearInterval(intervalo);
+      intervalo = setInterval(() => {
+        tempo--;
+        elementoCronometro.textContent = `Tempo: ${tempo}`;
+        if (tempo <= 0) {
+          clearInterval(intervalo);
+          encerrarJogo();
+        }
+      }, 1000);
+    }
+
+    function gerarPergunta() {
+      perguntasRespondidasNaFase++;
+
+      if (perguntasRespondidasNaFase > perguntasPorFase) {
+        perguntasRespondidasNaFase = 1;
+        fase++;
+        if (fase <= 4) {
+          mostrarModal(`🎉 Parabéns! Agora você está na Fase ${fase} (${nomeFases(fase)})!`, () => {
+            gerarPergunta();
+          });
+          return; // espera fechar modal antes de continuar
+        } else {
+          encerrarJogo();
+          return;
+        }
+      }
+
+      if (fase === 1) {
         numero1 = Math.floor(Math.random() * 10 + 1);
         numero2 = Math.floor(Math.random() * 10 + 1);
         respostaCorreta = numero1 + numero2;
         elementoPergunta.textContent = `Quanto é ${numero1} + ${numero2}?`;
-        break;
-      case 2:
+      } else if (fase === 2) {
         numero1 = Math.floor(Math.random() * 20 + 1);
         numero2 = Math.floor(Math.random() * Math.min(numero1, 15) + 1);
         respostaCorreta = numero1 - numero2;
         elementoPergunta.textContent = `Quanto é ${numero1} - ${numero2}?`;
-        break;
-      case 3:
+      } else if (fase === 3) {
         numero1 = Math.floor(Math.random() * 10 + 1);
         numero2 = Math.floor(Math.random() * 10 + 1);
         respostaCorreta = numero1 * numero2;
         elementoPergunta.textContent = `Quanto é ${numero1} × ${numero2}?`;
-        break;
-      case 4:
+      } else if (fase === 4) {
         respostaCorreta = Math.floor(Math.random() * 10 + 1);
         numero2 = Math.floor(Math.random() * 9 + 1);
         numero1 = numero2 * respostaCorreta;
         elementoPergunta.textContent = `Quanto é ${numero1} ÷ ${numero2}?`;
-        break;
-    }
-
-    inputResposta.value = "";
-    inputResposta.focus();
-    elementoFeedback.textContent = "";
-    elementoFeedback.classList.remove("correct", "wrong");
-  }
-
-  function verificarResposta() {
-    const respostaUsuario = Number(inputResposta.value.trim());
-    if (isNaN(respostaUsuario)) {
-      elementoFeedback.textContent = "Digite um número válido.";
-      elementoFeedback.classList.add("wrong");
-      elementoFeedback.classList.remove("correct");
-      return;
-    }
-
-    const acertou = Math.abs(respostaUsuario - respostaCorreta) < 0.001;
-    if (acertou) {
-      pontuacao += 10;
-      elementoFeedback.textContent = "✅ Correto!";
-      elementoFeedback.classList.add("correct");
-      elementoFeedback.classList.remove("wrong");
-    } else {
-      elementoFeedback.textContent = `❌ Errado! Resposta correta: ${respostaCorreta}`;
-      elementoFeedback.classList.add("wrong");
-      elementoFeedback.classList.remove("correct");
-    }
-
-    atualizarInterface();
-    setTimeout(gerarPergunta, 1200);
-  }
-
-  function atualizarInterface() {
-    const nomes = nomeFases();
-    if (fase > nomes.length) return;
-    elementoFase.textContent = `Fase: ${fase} (${nomes[fase-1]})`;
-    elementoPontuacao.textContent = `Pontuação: ${pontuacao}`;
-    elementoCronometro.textContent = `Tempo: ${tempo}`;
-  }
-
-  function nomeFases() {
-    return ["Soma", "Subtração", "Multiplicação", "Divisão"];
-  }
-
-  function encerrarJogo() {
-    clearInterval(intervalo);
-    alert(`⏰ Tempo esgotado! ${nomeAluno}, sua pontuação final foi: ${pontuacao}`);
-    salvarRanking(nomeAluno, pontuacao);
-    mostrarRanking();
-    gameDiv.style.display = "none";
-    elementoFeedback.textContent = "";
-    elementoFeedback.classList.remove("correct", "wrong");
-    inputResposta.value = "";
-    inputNome.value = "";
-  }
-
-  function salvarRanking(nome, pontos) {
-    let ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
-    const index = ranking.findIndex(item => item.nome === nome);
-    if (index !== -1) {
-      if (pontos > ranking[index].pontos) {
-        ranking[index].pontos = pontos;
       }
-    } else {
-      ranking.push({ nome, pontos });
-    }
-    ranking.sort((a,b) => b.pontos - a.pontos);
-    localStorage.setItem("rankingAlunos", JSON.stringify(ranking));
-  }
 
-  function mostrarRanking() {
-    const ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
-    if(ranking.length === 0){
-      listaRanking.innerHTML = "<i>Nenhum registro ainda.</i>";
-      return;
+      inputResposta.value = "";
+      elementoFeedback.textContent = "";
+      atualizarInterface();
+      inputResposta.focus();
     }
-    listaRanking.innerHTML = ranking.slice(0,10)
-      .map((item, i) => `<div class="ranking-item">${i+1}. ${item.nome}: ${item.pontos} pts</div>`)
-      .join("");
-  }
 
-  function limparRanking() {
-    if(confirm("Tem certeza que deseja limpar o ranking?")) {
-      localStorage.removeItem("rankingAlunos");
+    function verificarResposta() {
+      const resposta = Number(inputResposta.value);
+      if (inputResposta.value.trim() === "") return;
+
+      const acertou = Math.abs(resposta - respostaCorreta) < 0.001;
+
+      if (acertou) {
+        pontuacao += 10;
+        elementoFeedback.textContent = "✅ Correto!";
+        elementoFeedback.classList.remove("wrong");
+      } else {
+        elementoFeedback.textContent = `❌ Errado! Resposta correta: ${respostaCorreta}`;
+        elementoFeedback.classList.add("wrong");
+      }
+      atualizarInterface();
+
+      setTimeout(() => {
+        gerarPergunta();
+      }, 1000);
+    }
+
+    function atualizarInterface() {
+      elementoFase.textContent = `Fase: ${fase} (${nomeFases(fase)})`;
+      elementoPontuacao.textContent = `Pontuação: ${pontuacao}`;
+      elementoCronometro.textContent = `Tempo: ${tempo}`;
+    }
+
+    function nomeFases(n) {
+      const nomes = ["Soma", "Subtração", "Multiplicação", "Divisão"];
+      return nomes[n - 1] || "Desconhecida";
+    }
+
+    function encerrarJogo() {
+      btnIniciar.style.display = "block";
+      inputNome.disabled = false;
+      gameDiv.style.display = "none";
+      elementoFeedback.textContent = "";
+
+      alert(`${nomeAluno}, seu tempo acabou! Pontuação final: ${pontuacao}`);
+
+      salvarRanking(nomeAluno, pontuacao);
       mostrarRanking();
     }
+
+    // Modal personalizada
+    function mostrarModal(mensagem, callback) {
+  textoModal.textContent = mensagem;
+  modal.style.display = "flex";
+
+  function fechar() {
+    modal.style.display = "none";
+    btnFecharModal.removeEventListener("click", fechar);
+    document.removeEventListener("keydown", enterListener);
+    if (callback) callback();
   }
 
-  mostrarRanking();
-</script>
+  function enterListener(e) {
+    if (e.key === "Enter") {
+      fechar();
+    }
+  }
+
+  btnFecharModal.addEventListener("click", fechar);
+  document.addEventListener("keydown", enterListener);
+}
+
+    // Ranking localStorage
+    function salvarRanking(nome, pontos) {
+      let ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
+      ranking.push({ nome, pontos });
+      ranking.sort((a, b) => b.pontos - a.pontos);
+      localStorage.setItem("rankingAlunos", JSON.stringify(ranking));
+    }
+
+    function mostrarRanking() {
+      const lista = document.getElementById("listaRanking");
+      const ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
+      lista.innerHTML = ranking.slice(0, 10).map((item, i) => {
+        return `<div class='ranking-item'>${i + 1}. ${item.nome}: ${item.pontos} pts</div>`;
+      }).join("");
+    }
+    function resetarRanking() {
+    if (confirm("Tem certeza que deseja apagar todo o ranking?")) {
+    localStorage.removeItem("rankingAlunos");
+    mostrarRanking();
+  }
+}
+
+    // Carrega ranking ao abrir página
+    mostrarRanking();
+  </script>
 </body>
 </html>
-
