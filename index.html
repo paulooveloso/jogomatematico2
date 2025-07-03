@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jogo Matemático</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    /* Fonte e cores base */
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #0b1120;
+      color: #cce6ff;
+      padding: 40px 20px;
+      margin: 0;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Fundo com símbolos matemáticos flutuantes */
+    body::before {
+      content: "∑ √ ∞ ∫ π ∆ α β γ θ λ ∂ ± × ÷ ∞ ∑ ∆ π";
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 6rem;
+      color: rgba(255, 255, 255, 0.07);
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+      letter-spacing: 0.4em;
+      animation: floatSymbols 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatSymbols {
+      0% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-50px); }
+      100% { transform: translateX(-50%) translateY(0); }
+    }
+
+    /* Container do jogo */
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: rgba(0, 42, 102, 0.85);
+      padding: 30px 35px;
+      border-radius: 30px;
+      box-shadow:
+        0 0 25px 5px rgba(0, 102, 204, 0.7),
+        inset 0 0 40px 7px rgba(0, 150, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid rgba(0, 153, 255, 0.8);
+      position: relative;
+      z-index: 1;
+      color: #cceeff;
+      text-align: center;
+    }
+
+    /* Título */
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      color: #a0d8ff;
+      text-shadow:
+        0 0 8px #00aaff,
+        0 0 20px #0099ff,
+        0 0 30px #0066cc;
+      letter-spacing: 0.12em;
+    }
+
+    /* Inputs e botões */
+    input[type="text"], input[type="number"] {
+      width: 70%;
+      padding: 14px 20px;
+      font-size: 1.4rem;
+      border-radius: 28px;
+      border: 2px solid #007acc;
+      background: rgba(10, 40, 70, 0.5);
+      color: #cceeff;
+      text-align: center;
+      box-shadow: inset 0 0 12px #005999aa;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    input::placeholder {
+      color: #99cceeaa;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #33bbff;
+      box-shadow: inset 0 0 18px #33bbffcc;
+    }
+
+    button {
+      margin: 10px 12px 8px;
+      padding: 16px 34px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #00ccff;
+      background: transparent;
+      border: 2px solid #0099cc;
+      border-radius: 28px;
+      cursor: pointer;
+      text-shadow:
+        0 0 8px #00ccff,
+        0 0 15px #0088bb;
+      box-shadow:
+        0 0 12px #00bbff33,
+        inset 0 0 8px #00ccff55;
+      transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
+      user-select: none;
+      position: relative;
+      z-index: 2;
+    }
+    button {
+  margin: 10px 12px 8px;
+  padding: 16px 34px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #00ccff;
+  background: transparent;
+  border: 2px solid #0099cc;
+  border-radius: 28px;
+  cursor: pointer;
+  text-shadow:
+    0 0 8px #00ccff,
+    0 0 15px #0088bb;
+  box-shadow:
+    0 0 12px #00bbff33,
+    inset 0 0 8px #00ccff55;
+  transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
+  user-select: none;
+  position: relative;
+  z-index: 2;
+}
+
+/* Aqui começa o estilo do botão de som */
+#btnToggleSom {
+  margin: 10px auto 0;
+  display: block;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #00ccff;
+  background: transparent;
+  border: 2px solid #0099cc;
+  border-radius: 28px;
+  cursor: pointer;
+  text-shadow:
+    0 0 8px #00ccff,
+    0 0 15px #0088bb;
+  box-shadow:
+    0 0 12px #00bbff33,
+    inset 0 0 8px #00ccff55;
+  transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
+  user-select: none;
+}
+
+#btnToggleSom:hover {
+  background-color: rgba(0, 153, 255, 0.2);
+  box-shadow:
+    0 0 25px #00ccff,
+    inset 0 0 18px #00ccff;
+  color: #aeefff;
+}
+
+
+    button:hover {
+      background-color: rgba(0, 153, 255, 0.2);
+      box-shadow:
+        0 0 25px #00ccff,
+        inset 0 0 18px #00ccff;
+      color: #aeefff;
+    }
+
+    /* Texto do jogo */
+    #fase, #pontuacao, #cronometro, #pergunta, #feedback {
+      font-weight: 600;
+      font-size: 1.4rem;
+      margin: 15px 0;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 6px rgba(0, 153, 255, 0.9);
+      min-height: 1.8em;
+    }
+
+    /* Feedback com animação neon */
+    #feedback {
+      color: #00eaff;
+      animation: pulse 1.8s ease-in-out infinite;
+      user-select: none;
+    }
+
+    #feedback.wrong {
+      color: #ff4444;
+      animation: pulseRed 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 10px #00eaff, 0 0 20px #0077cc; }
+      50% { text-shadow: 0 0 22px #33ffff, 0 0 40px #0099cc; }
+    }
+
+    @keyframes pulseRed {
+      0%, 100% { text-shadow: 0 0 10px #ff4444, 0 0 30px #bb2222; }
+      50% { text-shadow: 0 0 22px #ff6666, 0 0 50px #cc2222; }
+    }
+
+    /* Ranking */
+    .ranking {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      text-align: left;
+      color: #a0d8ff;
+      box-shadow:
+        0 0 12px #00bbff44;
+    }
+
+    .ranking h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .ranking-item {
+      font-size: 1rem;
+      margin: 4px 0;
+    }
+
+    /* Modal para alertas personalizadas */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 17, 32, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: rgba(0, 42, 102, 0.9);
+      padding: 25px 40px;
+      border-radius: 25px;
+      box-shadow:
+        0 0 25px 5px rgba(0, 102, 204, 0.9),
+        inset 0 0 40px 7px rgba(0, 150, 255, 0.6);
+      color: #a0d8ff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      text-shadow:
+        0 0 8px #00aaff,
+        0 0 20px #0099ff;
+    }
+
+    .modal-content button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      border-radius: 20px;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #00ccff;
+      background: transparent;
+      cursor: pointer;
+      box-shadow:
+        0 0 12px #00bbff33,
+        inset 0 0 8px #00ccff55;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .modal-content button:hover {
+      box-shadow:
+        0 0 25px #00ccff,
+        inset 0 0 18px #00ccff;
+    }
+
+    /* Responsivo */
+    @media (max-width: 520px) {
+      input[type="text"], input[type="number"] {
+        width: 85%;
+        font-size: 1.2rem;
+      }
+      button {
+        width: 90%;
+        margin: 12px auto;
+        font-size: 1.1rem;
+      }
+      h1 {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jogo Matemático</h1>
+    <input type="text" id="nomeAluno" placeholder="Digite seu nome" autocomplete="off" />
+    
+    <div id="game" style="display:none">
+      <p id="fase">Fase: 1 (Soma)</p>
+      <p id="pontuacao">Pontuação: 0</p>
+      <p id="cronometro">Tempo: 60</p>
+      <p id="pergunta"></p>
+      <input type="number" id="resposta" placeholder="Digite a resposta" autocomplete="off" />
+      <p id="feedback"></p>
+      <button id="btnResponder">Responder</button>
+    </div>
+
+    <button id="btnIniciar">Iniciar Jogo</button>
+
+    <!-- Ranking e outros elementos que você já tiver aqui -->
+
+  </div>
+
+  <!-- Áudios de acerto e erro -->
+  <audio id="somAcerto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b7acfa7813.mp3?filename=correct-2-46134.mp3"></audio>
+  <audio id="somErro" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b31e3009ce.mp3?filename=wrong-2-46099.mp3"></audio>
+</body>
+
+
+  <!-- Modal para avisos -->
+  <div id="modalAlerta" class="modal">
+    <div class="modal-content">
+      <p id="textoModal"></p>
+      <button id="btnFecharModal">OK</button>
+    </div>
+  </div>
+
+  <script>
+    let fase = 1;
+    let pontuacao = 0;
+    let tempo = 60;
+    let intervalo;
+    let numero1, numero2, respostaCorreta;
+    let nomeAluno = "";
+    let perguntasRespondidasNaFase = 0;
+    const perguntasPorFase = 4;
+
+    const inputNome = document.getElementById("nomeAluno");
+    const inputResposta = document.getElementById("resposta");
+    const elementoPergunta = document.getElementById("pergunta");
+    const elementoFeedback = document.getElementById("feedback");
+    const elementoFase = document.getElementById("fase");
+    const elementoPontuacao = document.getElementById("pontuacao");
+    const elementoCronometro = document.getElementById("cronometro");
+    const gameDiv = document.getElementById("game");
+    const somAcerto = document.getElementById("somAcerto");
+    const somErro = document.getElementById("somErro");
+
+
+    const btnIniciar = document.getElementById("btnIniciar");
+    const btnResponder = document.getElementById("btnResponder");
+
+    const modal = document.getElementById("modalAlerta");
+    const textoModal = document.getElementById("textoModal");
+    const btnFecharModal = document.getElementById("btnFecharModal");
+
+    // Eventos
+    btnIniciar.onclick = iniciarJogo;
+    btnResponder.onclick = verificarResposta;
+
+    // Enter inicia o jogo se no nome, ou responde se estiver no input resposta
+    inputNome.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        iniciarJogo();
+      }
+    });
+
+    inputResposta.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        verificarResposta();
+      }
+    });
+
+    function iniciarJogo() {
+      nomeAluno = inputNome.value.trim();
+      if (!nomeAluno) {
+        alert("Por favor, digite seu nome!");
+        inputNome.focus();
+        return;
+      }
+      fase = 1;
+      pontuacao = 0;
+      tempo = 60;
+      perguntasRespondidasNaFase = 0;
+
+      gameDiv.style.display = "block";
+      atualizarInterface();
+      gerarPergunta();
+      iniciarCronometro();
+
+      inputResposta.focus();
+      elementoFeedback.textContent = "";
+      btnIniciar.style.display = "none";
+      inputNome.disabled = true;
+    }
+
+    function iniciarCronometro() {
+      clearInterval(intervalo);
+      intervalo = setInterval(() => {
+        tempo--;
+        elementoCronometro.textContent = `Tempo: ${tempo}`;
+        if (tempo <= 0) {
+          clearInterval(intervalo);
+          encerrarJogo();
+        }
+      }, 1000);
+    }
+
+    function gerarPergunta() {
+      perguntasRespondidasNaFase++;
+
+      if (perguntasRespondidasNaFase > perguntasPorFase) {
+        perguntasRespondidasNaFase = 1;
+        fase++;
+        if (fase <= 4) {
+          mostrarModal(`🎉 Parabéns! Agora você está na Fase ${fase} (${nomeFases(fase)})!`, () => {
+            gerarPergunta();
+          });
+          return; // espera fechar modal antes de continuar
+        } else {
+          encerrarJogo();
+          return;
+        }
+      }
+
+      if (fase === 1) {
+        numero1 = Math.floor(Math.random() * 10 + 1);
+        numero2 = Math.floor(Math.random() * 10 + 1);
+        respostaCorreta = numero1 + numero2;
+        elementoPergunta.textContent = `Quanto é ${numero1} + ${numero2}?`;
+      } else if (fase === 2) {
+        numero1 = Math.floor(Math.random() * 20 + 1);
+        numero2 = Math.floor(Math.random() * Math.min(numero1, 15) + 1);
+        respostaCorreta = numero1 - numero2;
+        elementoPergunta.textContent = `Quanto é ${numero1} - ${numero2}?`;
+      } else if (fase === 3) {
+        numero1 = Math.floor(Math.random() * 10 + 1);
+        numero2 = Math.floor(Math.random() * 10 + 1);
+        respostaCorreta = numero1 * numero2;
+        elementoPergunta.textContent = `Quanto é ${numero1} × ${numero2}?`;
+      } else if (fase === 4) {
+        respostaCorreta = Math.floor(Math.random() * 10 + 1);
+        numero2 = Math.floor(Math.random() * 9 + 1);
+        numero1 = numero2 * respostaCorreta;
+        elementoPergunta.textContent = `Quanto é ${numero1} ÷ ${numero2}?`;
+      }
+
+      inputResposta.value = "";
+      elementoFeedback.textContent = "";
+      atualizarInterface();
+      inputResposta.focus();
+    }
+
+    if (acertou) {
+  pontuacao += 10;
+  elementoFeedback.textContent = "✅ Correto!";
+  elementoFeedback.classList.remove("wrong");
+  if (somAtivo) {
+    somAcerto.currentTime = 0;
+    somAcerto.play();
+  }
+} else {
+  elementoFeedback.textContent = `❌ Errado! Resposta correta: ${respostaCorreta}`;
+  elementoFeedback.classList.add("wrong");
+  if (somAtivo) {
+    somErro.currentTime = 0;
+    somErro.play();
+  }
+}
+
+  atualizarInterface();
+
+  setTimeout(() => {
+    gerarPergunta();
+  }, 1000);
+
+
+    function atualizarInterface() {
+      elementoFase.textContent = `Fase: ${fase} (${nomeFases(fase)})`;
+      elementoPontuacao.textContent = `Pontuação: ${pontuacao}`;
+      elementoCronometro.textContent = `Tempo: ${tempo}`;
+    }
+
+    function nomeFases(n) {
+      const nomes = ["Soma", "Subtração", "Multiplicação", "Divisão"];
+      return nomes[n - 1] || "Desconhecida";
+    }
+
+    function encerrarJogo() {
+      btnIniciar.style.display = "block";
+      inputNome.disabled = false;
+      gameDiv.style.display = "none";
+      elementoFeedback.textContent = "";
+
+      alert(`${nomeAluno}, seu tempo acabou! Pontuação final: ${pontuacao}`);
+
+      salvarRanking(nomeAluno, pontuacao);
+      mostrarRanking();
+    }
+
+    // Modal personalizada
+    function mostrarModal(mensagem, callback) {
+  textoModal.textContent = mensagem;
+  modal.style.display = "flex";
+
+  function fechar() {
+    modal.style.display = "none";
+    btnFecharModal.removeEventListener("click", fechar);
+    document.removeEventListener("keydown", enterListener);
+    if (callback) callback();
+  }
+
+  function enterListener(e) {
+    if (e.key === "Enter") {
+      fechar();
+    }
+  }
+
+  btnFecharModal.addEventListener("click", fechar);
+  document.addEventListener("keydown", enterListener);
+}
+
+    // Ranking localStorage
+    function salvarRanking(nome, pontos) {
+      let ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
+      ranking.push({ nome, pontos });
+      ranking.sort((a, b) => b.pontos - a.pontos);
+      localStorage.setItem("rankingAlunos", JSON.stringify(ranking));
+    }
+
+    function mostrarRanking() {
+      const lista = document.getElementById("listaRanking");
+      const ranking = JSON.parse(localStorage.getItem("rankingAlunos")) || [];
+      lista.innerHTML = ranking.slice(0, 10).map((item, i) => {
+        return `<div class='ranking-item'>${i + 1}. ${item.nome}: ${item.pontos} pts</div>`;
+      }).join("");
+    }
+    function resetarRanking() {
+    if (confirm("Tem certeza que deseja apagar todo o ranking?")) {
+    localStorage.removeItem("rankingAlunos");
+    mostrarRanking();
+  }
+}
+
+    // Carrega ranking ao abrir página
+    mostrarRanking();
+  </script>
+</body>
+</html>
